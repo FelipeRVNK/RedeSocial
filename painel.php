@@ -22,11 +22,11 @@
                 <a href=""><li>Pesquisa</li></a>
                 <h1>Social <span>Net</span></h1>
                 <a href=""><li>Home</li></a>
-                <a href=""><li>LogOut</li></a>
+                <a href="logout.php"><li>LogOut</li></a>
             </ul>
         </nav>
     </header>
-
+    
     <div class="postagem">
         <h2>Faça sua postagem: </h2>
         <input type="file" name="" id="">
