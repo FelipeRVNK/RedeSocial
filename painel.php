@@ -1,17 +1,15 @@
 <?php 
-    if(!isset($_SESSION)){
-        session_start();
-    }
-
+if(!isset($_SESSION)){
+    session_start();
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>e</title>
     <link rel="stylesheet" href="painel.css">
 </head>
 <body>
@@ -28,10 +26,17 @@
     </header>
     
     <div class="postagem">
-        <h2>Faça sua postagem: </h2>
-        <input type="file" name="" id="">
-        <input type="text" name="" id="" placeholder="O que você está pensando hoje?">
-        <input type="submit" value="Enviar">
+        <form action="" method="post" enctype="multipart/form-data">
+            <h2>Faça sua postagem: </h2>
+            <textarea name="texto" id="post-text" placeholder="No que você está pensando?"></textarea>
+            <div class="postagem-baixo">
+                <label for="file-input">
+                    <img src="./camera-regular-36.png" alt="">
+                </label>
+                <input type="submit" value="Enviar">
+                <input type="file" name="file" id="file-input" hidden>
+            </div>
+        </form>
     </div>
 </body>
 </html>
