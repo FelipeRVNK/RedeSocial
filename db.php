@@ -1,5 +1,5 @@
 <?php 
-    $banco = new mysqli("localhost:3307", "root", "", "redesocial");
+    $banco = new mysqli("localhost", "root", "", "redesocial");
 
     if($banco -> error){
         die("falha ao conectar");
