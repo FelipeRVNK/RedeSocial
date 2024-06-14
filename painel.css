@@ -119,6 +119,7 @@ input[type="submit"]:hover {
     width: 100%;
     max-height: 500px;
     margin-top: 10px;
+    object-fit: cover;
 }
 .pub .span_curtidas{
     padding-bottom: 10px;
