@@ -4,6 +4,7 @@
     if($banco -> error){
         die("falha ao conectar");
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
