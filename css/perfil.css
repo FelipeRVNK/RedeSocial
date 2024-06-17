@@ -1,0 +1,91 @@
+svg:hover{
+    fill: red;
+}
+
+ul .logout{
+    padding-left: 95px;
+}
+
+.foto-perfil{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-family:  "Roboto", sans-serif;
+}
+
+.foto-perfil label {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.foto-perfil img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: filter 0.3s ease;
+}
+
+.foto-perfil img:hover {
+    filter: blur(5px);
+}
+
+.foto-perfil .imagem-perfil {
+    border-radius: 50%;
+    background: linear-gradient(rgba(255, 255, 255, 0.929), rgba(255, 255, 255, 0.905)) padding-box, linear-gradient(rgb(148, 20, 228), rgb(81, 1, 108)) border-box;
+    border: 5px solid #0000;
+    max-width: 100%;
+    position: relative;
+}
+
+.foto-perfil .hover-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none; 
+    color: #6d44b8;
+}
+
+.foto-perfil label:hover .hover-icon {
+    opacity: 1;
+}
+
+.editar-excluir{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    
+}
+
+.editar-excluir button{
+    color: #fff;
+    background: #573b8a;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .2s ease-in;
+    height: 40px;
+    width: 150px;
+}
+
+.editar:hover{
+    background-color: #FFBF00;
+    color: black;
+}
+
+.excluir:hover{
+    background-color: #C40C0C;
+}
+
+

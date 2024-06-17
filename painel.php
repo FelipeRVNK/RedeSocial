@@ -1,37 +1,101 @@
+<?php 
+    include ('db.php');
+
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+
+    if(isset($_POST['Postar'])){
+        $id = $_SESSION['id'];
+
+        if($_FILES["file"]["error"] > 0){
+            $texto = $_POST["texto"];
+
+            if($texto == ""){
+                echo "<h3> Escreva algo </h3>";
+            }else{
+                $query = "INSERT INTO pubs (usuario,texto) VALUES ('$id','$texto')";
+                if ($banco->query($query) === TRUE) {
+                    echo 'Postagem realizada com sucesso.';
+                    header("Location: painel.php");
+                    exit();
+                }else {
+                    echo 'Falha na execução do código: ' . $banco->error;
+                }
+            }
+        }else{
+
+            $img = $_FILES["file"]["name"];
+
+            move_uploaded_file($_FILES["file"]["tmp_name"], "upload/".$img);
+            $texto = $_POST['texto'];
+
+            if($texto == ""){
+                echo "<h3> Escreva algo </h3>";
+            }else{
+                $query = "INSERT INTO pubs (imagem,texto,usuario) VALUES ('$img','$texto','$id')";
+                if ($banco->query($query) === TRUE) {
+                    echo 'Postagem realizada com sucesso.';
+                    header("Location: painel.php");
+                    exit();
+
+                }else {
+                    echo 'Falha na execução do código: ' . $banco->error;
+                }
+            }
+        }
+    }
+
+    ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Net</title>
-    <link rel="stylesheet" href="painel.css">
+    <link rel="stylesheet" href="./css/painel.css">
 </head>
+
 <body>
     <header class="container">
         <nav>
             <ul>
-                <a href="painel.php"><li><h1>Social <span>Net</span></h1></li></a>
+                <a href="painel.php">
+                    <li>
+                        <h1>Social <span>Net</span></h1>
+                    </li>
+                </a>
                 <li>
                     <form class="form_search" method="GET" action="pesquisar.php">
                         <label for="search" class="label_search">
-                            <input class="input_search" type="text" required="" placeholder="Pesquise no SocialNet" id="search" name="query">
+                            <input class="input_search" type="text" required="" placeholder="Pesquise no SocialNet"
+                                id="search" name="query">
                             <div class="fancy-bg"></div>
                             <div class="search">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"
+                                    class="r-14j79pv r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-4wgw6l r-f727ji r-bnwqim r-1plcrui r-lrvibr">
                                     <g>
-                                        <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                                        <path
+                                            d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                                        </path>
                                     </g>
                                 </svg>
                             </div>
                             <button class="close-btn" type="reset">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-            </svg>
-        </button>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
                         </label>
                     </form>
                 </li>
-                <a href="perfil.php"><li><img src="user-circle-solid-48.png" alt=""></li></a>
+                <a href="perfil.php">
+                    <li><img src="./img/user-circle-solid-48.png" alt=""></li>
+                </a>
             </ul>
         </nav>
     </header>
@@ -46,7 +110,7 @@
             <textarea name="texto" id="post-text" placeholder="No que você está pensando?"></textarea>
             <div class="postagem-baixo">
                 <label for="file-input">
-                    <img src="./camera-regular-36.png" alt="">
+                    <img src="./img/camera-regular-36.png" alt="">
                 </label>
                 <input type="file" name="file" id="file-input" hidden>
                 <input type="submit" name="Postar" value="Postar">
@@ -79,6 +143,7 @@
                 echo '<div class="pub">
                     <p><a href="#"> @'.$nomeUsuario.'</a></p>
                     <span class="span_pub"> '.$publicacao->texto.'</span>
+                    
                     <img src="upload/'.$publicacao->imagem.'" />
                     <div class="pub_interacao">
                         <label class="like">
@@ -91,10 +156,11 @@
             }
         }
     ?>
-    
+
     <footer>
-        <p>&copy; Social<span>Net</span>| Todos os direitos reservados.</p>
+        <p>&copy; Social<span>Net</span> | Todos os direitos reservados.</p>
     </footer>
     <button id="scrollToTopBtn">&#8593; Topo</button>
 </body>
+
 </html>

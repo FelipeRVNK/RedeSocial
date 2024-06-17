@@ -40,6 +40,7 @@
 
     if (isset ($_POST['criar'])){
         $usuario = $_POST['usuario'];
+        $foto = "foto-padrao-perfil.png";
         $email = $_POST['email'];
         $senha = $_POST['senha'];
 
@@ -54,7 +55,8 @@
             echo '<h3>Este email já está sendo utilizado ou está vazio</h3>';
         }
         else{
-            $query = "INSERT INTO `usuarios` (`id`, `usuario`, `email`, `senha`) VALUES (NULL, '$usuario', '$email', '$senha')";
+            
+            $query = "INSERT INTO `usuarios` (`id`, `usuario`, `foto`, `email`, `senha`) VALUES (NULL, '$usuario', '$foto', '$email', '$senha')";
             $data = $banco -> query($query) or die ("falha na execução do codigo");
             if($data){
                 if(!isset($_SESSION)){
@@ -75,7 +77,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="./css/login.css">
     <title>Login rede</title>
 </head>
 
