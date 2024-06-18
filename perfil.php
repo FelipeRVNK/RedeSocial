@@ -9,6 +9,20 @@
     $id = $_SESSION['id'];
     $usuario = $_SESSION['usuario'];
 
+    if(isset($_POST['Salvar'])){
+        if(isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+            $img = $_FILES["file"]["name"];
+            move_uploaded_file($_FILES["file"]["tmp_name"], "upload/".$img);
+            $query = "UPDATE `usuarios` SET `foto` = '$img' WHERE `usuarios`.`id` = '$id'";
+            if ($banco->query($query) === TRUE) {
+                echo 'foto alterada com sucesso';
+            } else {
+                echo 'Falha na execução do código: ' . $banco->error;
+            }
+        } else {
+            echo 'Erro no upload do arquivo.';
+        }
+    }
     if (isset ($_POST['deletar'])){
 
         $query = "DELETE FROM usuarios WHERE `usuarios`.`id` ='$id'";
@@ -88,32 +102,35 @@
             </nav>
         </header>
     </header>
-    <div class="foto-perfil">
-        <div class="imagem-perfil">
-            <label for="file-input">
-                <?php
-                   $busca = $banco->query("SELECT foto FROM usuarios WHERE id='$id'");
-                   if ($busca) {
-                       $publicacao = $busca->fetch_object();
-                       if ($publicacao && isset($publicacao->foto)) {
-                           echo '<img src="upload/'.$publicacao->foto.'" />';
-                       } else {
-                           echo 'Foto não encontrada.';
-                       }
-                   } else {
-                       echo 'Erro na consulta: ' . $banco->error;
-                   }
+    <form method="POST" enctype="multipart/form-data">
+        <div class="foto-perfil">
+            <div class="imagem-perfil">
+                <label for="file-input">
+                    <?php
+                $busca = $banco->query("SELECT foto FROM usuarios WHERE id='$id'");
+                if ($busca) {
+                    $publicacao = $busca->fetch_object();
+                    if ($publicacao && isset($publicacao->foto)) {
+                        echo '<img src="upload/'.$publicacao->foto.'" />';
+                    } else {
+                        echo 'Foto não encontrada.';
+                    }
+                } else {
+                    echo 'Erro na consulta: ' . $banco->error;
+                }
                 ?>
-                <div class="hover-icon">
-                    <i class="fas fa-camera"></i>
-                </div>
-            </label>
-            <input type="file" name="file" id="file-input" hidden>
+                    <div class="hover-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </label>
+                <input type="file" name="file" id="file-input" hidden>
+            </div>
+            <?php
+                echo '<h2>' . "@" . $usuario . '</h2>';
+            ?>
+            <input type="submit" name="Salvar" value="Salvar">
         </div>
-        <?php
-            echo'<h2>'. "@" .$usuario . '</h2>';
-        ?>
-    </div>
+    </form>
     <div class="editar-excluir">
         <a href="editar-conta.php"><button class="editar">Editar conta</button></a>
         <form method="POST">
