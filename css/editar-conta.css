@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.logo {
+    text-align: center;
+    margin-top: 100px;
+    font-family: "Rowdies", sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+span{
+    color: rgb(137, 21, 245);
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #240046;
+  max-height: 510px;
+  max-width: 500px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 7px 7px 10px 3px #24004628;
+  margin: 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+}
+
+/*Login*/
+.alterar {
+  position: relative;
+  width: 350px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.alterar label {
+  margin: 10% 0 5%;
+}
+
+label {
+  color: #fff;
+  font-size: 2rem;
+  justify-content: center;
+  display: flex;
+  font-weight: bold;
+}
+
+.input {
+
+  height: 40px;
+  background: #e0dede;
+  padding: 10px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+}
+
+/*Button*/
+input[type="submit"] {
+    width: 85%;
+    height: 40px;
+    margin: 12px auto 10%;
+    margin-bottom: 15px;
+    color: #fff;
+    background: #573b8a;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .2s ease-in;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #6d44b8;
+  }
+
+  a{
+    display: flex;
+    justify-content: center;
+  }

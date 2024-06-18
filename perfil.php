@@ -16,6 +16,13 @@
         header(("Location: login.php"));
 
     }
+
+    if (isset ($_POST['deletar-pub'])){
+        $idPublicacao = $_POST['idPublicacao'];
+        $query = "DELETE FROM `pubs` WHERE `pubs`.`id` = '$idPublicacao'";
+        $banco->query($query) or die("falha na execução do codigo");
+    }
+    
 ?>
 
 
@@ -108,8 +115,10 @@
         ?>
     </div>
     <div class="editar-excluir">
-        <button class="editar">Editar conta</button>
-        <button class="excluir">Deletar conta</button>
+        <a href="editar-conta.php"><button class="editar">Editar conta</button></a>
+        <form method="POST">
+            <button class="excluir" type="submit" name="deletar">Deletar conta</button>
+        </form>
     </div>
 
     <?php
@@ -124,6 +133,10 @@
             if($publicacao->imagem == ""){
                 echo '<div class="pub">
                     <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                    <form method="POST">
+                        <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                        <button class="excluir-pub" type="submit" name="deletar-pub">Apagar</button>
+                    </form>
                     <span class="span_pub"> '.$publicacao->texto.'</span>
                     <div class="pub_interacao">
                         <label class="like">
@@ -136,6 +149,10 @@
             }else{
                 echo '<div class="pub">
                     <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                    <form method="POST">
+                        <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                        <button class="excluir" type="submit" name="deletar-pub">Apagar</button>
+                    </form>
                     <span class="span_pub"> '.$publicacao->texto.'</span>
                     
                     <img src="upload/'.$publicacao->imagem.'" />
