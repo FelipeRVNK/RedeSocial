@@ -15,7 +15,6 @@
             move_uploaded_file($_FILES["file"]["tmp_name"], "upload/".$img);
             $query = "UPDATE `usuarios` SET `foto` = '$img' WHERE `usuarios`.`id` = '$id'";
             if ($banco->query($query) === TRUE) {
-                echo 'foto alterada com sucesso';
             } else {
                 echo 'Falha na execução do código: ' . $banco->error;
             }
@@ -50,6 +49,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="./css/perfil.css">
     <link rel="stylesheet" href="./css/painel.css">
+    <script src="rolagem.js"></script>
 </head>
 
 <body>
@@ -128,7 +128,7 @@
             <?php
                 echo '<h2>' . "@" . $usuario . '</h2>';
             ?>
-            <input type="submit" name="Salvar" value="Salvar">
+            <input class = "salvar_foto" type="submit" name="Salvar" value="Salvar">
         </div>
     </form>
     <div class="editar-excluir">
@@ -149,11 +149,13 @@
             $curtidas = $banco->query("SELECT curtidas FROM pubs");
             if($publicacao->imagem == ""){
                 echo '<div class="pub">
-                    <p><a href="#"> @'.$nomeUsuario.'</a></p>
-                    <form method="POST">
-                        <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
-                        <button class="excluir-pub" type="submit" name="deletar-pub">Apagar</button>
-                    </form>
+                    <div class="cima_apagar">
+                        <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                        <form method="POST">
+                            <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                            <button class="excluir-pub" type="submit" name="deletar-pub"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
+                        </form>
+                    </div>
                     <span class="span_pub"> '.$publicacao->texto.'</span>
                     <div class="pub_interacao">
                         <label class="like">
@@ -165,11 +167,13 @@
                 </div>';
             }else{
                 echo '<div class="pub">
-                    <p><a href="#"> @'.$nomeUsuario.'</a></p>
-                    <form method="POST">
-                        <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
-                        <button class="excluir" type="submit" name="deletar-pub">Apagar</button>
-                    </form>
+                    <div class="cima_apagar">
+                        <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                        <form method="POST">
+                            <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                            <button class="excluir-pub" type="submit" name="deletar-pub"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
+                        </form>
+                    </div>
                     <span class="span_pub"> '.$publicacao->texto.'</span>
                     
                     <img src="upload/'.$publicacao->imagem.'" />
@@ -187,6 +191,7 @@
     <footer>
         <p>&copy; Social<span>Net</span> | Todos os direitos reservados.</p>
     </footer>
+    <button id="scrollToTopBtn">&#8593; Topo</button>
 </body>
 
 

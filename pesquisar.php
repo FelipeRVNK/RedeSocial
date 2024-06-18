@@ -12,7 +12,7 @@
                 echo "<h2>Resultados da Pesquisa:</h2>";
                 while($results = $raw_results->fetch_assoc()){
                     echo '<div>
-                            <h3><a href="profile.php?id='.$results["id"].'">'.$results["usuario"].'</a></h3>
+                            <h3><a href="perfil.php?id='.$results["id"].'">'.$results["usuario"].'</a></h3>
                         </div>';
                 }
             } else {
