@@ -153,7 +153,13 @@
 
             if ($publicacao->imagem == "") {
                 echo '<div class="pub">
-                    <p><a href="perfilpesq.php?id=' . $idPublicacao . '">@' . $nomeUsuario . '</a></p>
+                     <div class="cima_apagar">
+                        <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                        <form method="POST">
+                            <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                            <button class="excluir-pub" type="submit" name="deletar-pub"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
+                        </form>
+                    </div>
                     <span class="span_pub">' . $publicacao->texto . '</span>
                     <div class="pub_interacao">';
                     $validacao_idUsuario = $banco->query("SELECT id_usuario FROM curtidas WHERE publicacao='$idBuscaPub' AND id_usuario='$id'");
@@ -182,7 +188,13 @@
                 echo '</div>';
             } else {
                 echo '<div class="pub">
-                    <p><a href="perfilpesq.php?id=' . $idPublicacao . '">@' . $nomeUsuario . '</a></p>
+                    <div class="cima_apagar">
+                        <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                        <form method="POST">
+                            <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                            <button class="excluir-pub" type="submit" name="deletar-pub"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
+                        </form>
+                    </div>
                     <span class="span_pub">' . $publicacao->texto . '</span>
                     <img src="upload/' . $publicacao->imagem . '" />
                     <div class="pub_interacao">';
