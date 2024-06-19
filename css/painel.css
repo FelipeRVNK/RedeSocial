@@ -267,9 +267,10 @@ textarea{
   font-size: larger;
   display: block;
   margin: 15px;
-  width: 300px;
+  width: 250px;
   font-family: "Open Sans", sans-serif;
   font-weight: 500;
+  margin-right: 220px;
 }
 
 .pub_interacao{
@@ -277,6 +278,21 @@ textarea{
     flex-direction: row;
     align-items: center;
 }
+
+.repostar-pub{
+    background: none; 
+    border: none;     
+    margin: 0;       
+    padding: 0;       
+    cursor: pointer;  
+    display: flex;    
+    align-items: center; 
+    justify-content: center;
+    height: 35px;
+    width: 35px;
+    margin-right: 40px;
+}
+
 #scrollToTopBtn {
     position: fixed;
     bottom: 20px;
