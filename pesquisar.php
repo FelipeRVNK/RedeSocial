@@ -1,3 +1,6 @@
+<?php 
+    include('protect-logout.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,6 +56,7 @@
         </nav>
     </header>
     <?php
+    
     include('db.php'); 
     
     if(isset($_GET['query'])) {

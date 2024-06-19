@@ -1,4 +1,5 @@
 <?php 
+    include('protect-logout.php');
     include ('db.php');
 
     if (!isset($_SESSION)) {
