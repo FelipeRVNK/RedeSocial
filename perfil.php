@@ -1,5 +1,5 @@
 <?php 
-
+    include('protect-logout.php');
     include ('db.php');
 
     if(!isset($_SESSION)){
@@ -15,7 +15,6 @@
             move_uploaded_file($_FILES["file"]["tmp_name"], "upload/".$img);
             $query = "UPDATE `usuarios` SET `foto` = '$img' WHERE `usuarios`.`id` = '$id'";
             if ($banco->query($query) === TRUE) {
-                echo 'foto alterada com sucesso';
             } else {
                 echo 'Falha na execução do código: ' . $banco->error;
             }
@@ -25,9 +24,11 @@
     }
     if (isset ($_POST['deletar'])){
 
-        $query = "DELETE FROM usuarios WHERE `usuarios`.`id` ='$id'";
-        $banco->query($query) or die("falha na execução do codigo");
-        header(("Location: login.php"));
+            $query = "DELETE FROM usuarios WHERE `usuarios`.`id` = '$id'";
+            $banco->query($query) or die("falha na execução do código ao deletar usuário");
+        
+            header("Location: login.php");
+        
 
     }
 
@@ -46,10 +47,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Perfil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="./css/perfil.css">
     <link rel="stylesheet" href="./css/painel.css">
+    <script src="rolagem.js"></script>
 </head>
 
 <body>
@@ -128,7 +130,7 @@
             <?php
                 echo '<h2>' . "@" . $usuario . '</h2>';
             ?>
-            <input type="submit" name="Salvar" value="Salvar">
+            <input class="salvar_foto" type="submit" name="Salvar" value="Salvar">
         </div>
     </form>
     <div class="editar-excluir">
@@ -142,51 +144,93 @@
         include ('db.php');       
 
         $busca = $banco->query("SELECT * FROM pubs WHERE usuario='$id' ORDER BY data DESC");
-        while($publicacao = $busca->fetch_object()){
+        while ($publicacao = $busca->fetch_object()) {
+            $id = $_SESSION['id'];
             $idPublicacao = $publicacao->usuario;
             $buscaUsuario = $banco->query("SELECT usuario FROM usuarios WHERE id = '$idPublicacao'");
             $nomeUsuario = $buscaUsuario->fetch_object()->usuario;
-            $curtidas = $banco->query("SELECT curtidas FROM pubs");
-            if($publicacao->imagem == ""){
+            $idBuscaPub = $publicacao->id;
+            $buscaCurtidas = $banco->query("SELECT * FROM curtidas WHERE publicacao='$idBuscaPub'"); 
+            $curtidas = mysqli_num_rows($buscaCurtidas);
+
+            if ($publicacao->imagem == "") {
                 echo '<div class="pub">
-                    <p><a href="#"> @'.$nomeUsuario.'</a></p>
-                    <form method="POST">
-                        <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
-                        <button class="excluir-pub" type="submit" name="deletar-pub">Apagar</button>
-                    </form>
-                    <span class="span_pub"> '.$publicacao->texto.'</span>
-                    <div class="pub_interacao">
-                        <label class="like">
-                            <input type="checkbox" name="curtir" value="1">
-                            <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID254"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID256"></path></svg>
-                        </label>
-                        <span class="span_curtidas"> '.$publicacao->curtidas.'</span>
+                     <div class="cima_apagar">
+                        <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                        <form method="POST">
+                            <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                            <button class="excluir-pub" type="submit" name="deletar-pub"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
+                        </form>
                     </div>
-                </div>';
-            }else{
+                    <span class="span_pub">' . $publicacao->texto . '</span>
+                    <div class="pub_interacao">';
+                    $validacao_idUsuario = $banco->query("SELECT id_usuario FROM curtidas WHERE publicacao='$idBuscaPub' AND id_usuario='$id'");
+                    $fazer_validacao_idUsuario = mysqli_num_rows($validacao_idUsuario);
+                    if($fazer_validacao_idUsuario >= 1){
+                        echo'<p class="like"><a href="painel.php?dislike='.$idBuscaPub.'">
+                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13
+                            c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002
+                            c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path>
+                            <path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5
+                            c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z"></path>
+                        </svg></a></p>';
+                    } else {
+                        echo'<p class="like"><a href="painel.php?like='.$idBuscaPub.'">
+                        <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13
+                            c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002
+                            c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path>
+                            <path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5
+                            c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z"></path>
+                        </svg></a></p>';
+                    }
+                    echo'<div><span class="num-like">'.$curtidas.'</span></div>';
+                echo '</div>';
+                echo '</div>';
+            } else {
                 echo '<div class="pub">
-                    <p><a href="#"> @'.$nomeUsuario.'</a></p>
-                    <form method="POST">
-                        <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
-                        <button class="excluir" type="submit" name="deletar-pub">Apagar</button>
-                    </form>
-                    <span class="span_pub"> '.$publicacao->texto.'</span>
-                    
-                    <img src="upload/'.$publicacao->imagem.'" />
-                    <div class="pub_interacao">
-                        <label class="like">
-                            <input type="checkbox" name="curtir" value="1">
-                            <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z" id="XMLID254"></path><path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z" id="XMLID256"></path></svg>
-                        </label>
-                        <span class="span_curtidas"> '.$publicacao->curtidas.'</span>
+                    <div class="cima_apagar">
+                        <p><a href="#"> @'.$nomeUsuario.'</a></p>
+                        <form method="POST">
+                            <input type="hidden" name="idPublicacao" value="'.$publicacao->id.'">
+                            <button class="excluir-pub" type="submit" name="deletar-pub"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path><path d="M9 10h2v8H9zm4 0h2v8h-2z"></path></svg></button>
+                        </form>
                     </div>
-                </div>';
+                    <span class="span_pub">' . $publicacao->texto . '</span>
+                    <img src="upload/' . $publicacao->imagem . '" />
+                    <div class="pub_interacao">';
+                $validacao_idUsuario = $banco->query("SELECT id_usuario FROM curtidas WHERE publicacao='$idBuscaPub' AND id_usuario='$id'");
+                $fazer_validacao_idUsuario = mysqli_num_rows($validacao_idUsuario);
+                if($fazer_validacao_idUsuario >= 1){
+                    echo'<p class="like"><a href="painel.php?dislike='.$idBuscaPub.'">
+                    <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13
+                        c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002
+                        c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path>
+                        <path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5
+                        c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z"></path>
+                    </svg></a></p>';
+                } else {
+                    echo'<p class="like"><a href="painel.php?like='.$idBuscaPub.'">
+                    <svg id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13
+                        c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002
+                        c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"></path>
+                        <path d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5
+                        c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z"></path>
+                    </svg></a></p>';
+                }
+                echo'<div><span class="num-like">'.$curtidas.'</span></div>';
+                echo '</div>';
+                echo '</div>';
             }
         }
     ?>
     <footer>
         <p>&copy; Social<span>Net</span> | Todos os direitos reservados.</p>
     </footer>
+    <button id="scrollToTopBtn">&#8593; Topo</button>
 </body>
 
 
